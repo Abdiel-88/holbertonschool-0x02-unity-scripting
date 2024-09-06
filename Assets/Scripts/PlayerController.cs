@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 10.0f;  // Player speed, editable in the Inspector
 
     private Rigidbody rb;
+    private int score = 0;  // New private variable to keep track of score
 
     // Start is called before the first frame update
     void Start()
@@ -27,5 +28,22 @@ public class PlayerController : MonoBehaviour
 
         // Apply the movement to the Rigidbody to move the Player
         rb.AddForce(movement * speed);
+    }
+
+    // Called when another collider enters the trigger collider attached to this GameObject
+    void OnTriggerEnter(Collider other)
+    {
+        // Check if the collided object has the tag "Pickup"
+        if (other.CompareTag("Pickup"))
+        {
+            // Increment the score
+            score++;
+
+            // Log the new score
+            Debug.Log($"Score: {score}");
+
+            // Disable the Coin object (or use Destroy if preferred)
+            other.gameObject.SetActive(false);
+        }
     }
 }
