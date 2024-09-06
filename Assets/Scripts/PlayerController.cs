@@ -1,20 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;  // Required for scene management
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10.0f;  // Player speed, editable in the Inspector
-    public int health = 5;       // New public variable to track health
+    public int health = 5;       // Variable to track health
+    private int originalHealth;  // To store the initial health value
+    private int score = 0;       // Variable to track score
+    private int originalScore;   // To store the initial score value
 
     private Rigidbody rb;
-    private int score = 0;       // Existing score variable
 
     // Start is called before the first frame update
     void Start()
     {
         // Get the Rigidbody component attached to the Player object
         rb = GetComponent<Rigidbody>();
+
+        // Store the initial values of health and score
+        originalHealth = health;
+        originalScore = score;
     }
 
     // FixedUpdate is called at a fixed interval, best for handling physics
@@ -51,6 +58,28 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"Health: {health}");
             // Optionally, disable or destroy the Trap object if needed
             // other.gameObject.SetActive(false);
+        }
+        else if (other.CompareTag("Goal"))
+        {
+            // Log the winning message
+            Debug.Log("You win!");
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (health <= 0)
+        {
+            // Log the game over message
+            Debug.Log("Game Over!");
+
+            // Reload the current scene
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            // Reset health and score
+            health = originalHealth;
+            score = originalScore;
         }
     }
 }
