@@ -5,9 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10.0f;  // Player speed, editable in the Inspector
+    public int health = 5;       // New public variable to track health
 
     private Rigidbody rb;
-    private int score = 0;  // New private variable to keep track of score
+    private int score = 0;       // Existing score variable
 
     // Start is called before the first frame update
     void Start()
@@ -33,17 +34,23 @@ public class PlayerController : MonoBehaviour
     // Called when another collider enters the trigger collider attached to this GameObject
     void OnTriggerEnter(Collider other)
     {
-        // Check if the collided object has the tag "Pickup"
         if (other.CompareTag("Pickup"))
         {
             // Increment the score
             score++;
-
             // Log the new score
             Debug.Log($"Score: {score}");
-
-            // Disable the Coin object (or use Destroy if preferred)
+            // Disable the Coin object
             other.gameObject.SetActive(false);
+        }
+        else if (other.CompareTag("Trap"))
+        {
+            // Decrement the health
+            health--;
+            // Log the new health value
+            Debug.Log($"Health: {health}");
+            // Optionally, disable or destroy the Trap object if needed
+            // other.gameObject.SetActive(false);
         }
     }
 }
